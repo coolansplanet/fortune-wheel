@@ -1957,7 +1957,12 @@
 
         wheelContainer.style.rotate = `${Math.round(degrees)}deg`;
 
-        const medal = medalList[winners.length].cloneNode(true);
+        const medalIndex =
+          winners.length > medalList.length - 2
+            ? medalList.length - 2
+            : winners.length;
+
+        const medal = medalList[medalIndex].cloneNode(true);
         setTimeout(() => {
           const winnerIndex =
             team.length -
