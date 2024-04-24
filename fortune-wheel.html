@@ -63,7 +63,6 @@
       .list-side .winner-element {
         display: grid;
         grid-template-columns: 1fr 2em;
-        line-height: 2em;
         color: var(--list-text-color);
         text-align: left;
         font-size: 1.5vw;
@@ -72,6 +71,7 @@
         padding: 1vw;
       }
       .list-side .winner-element p {
+        line-height: 2em;
         margin: 0;
         padding: 0;
       }
@@ -257,11 +257,16 @@
         opacity: 1;
         scale: 1;
       }
-      .winner-title {
-        font-size: 3vw;
-        text-align: center;
+      .winner-medal {
+        height: 8vw;
         margin: 0;
-        color: var(--bg-color);
+        display: grid;
+        justify-items: center;
+      }
+
+      .winner-medal svg {
+        height: 100%;
+        width: auto;
       }
       .winner-name {
         font-size: 5vw;
@@ -1797,7 +1802,7 @@
     <div class="winner">
       <div class="winner-overlay"></div>
       <div class="winner-box">
-        <p class="winner-title">Winner:</p>
+        <div class="winner-medal"></div>
         <p class="winner-name"></p>
       </div>
     </div>
@@ -1933,6 +1938,10 @@
           const winner = team.splice(winnerIndex, 1)[0];
 
           winnerBanner.querySelector(".winner-name").innerHTML = winner.name;
+          winnerBanner.querySelector(".winner-medal").innerHTML = "";
+          winnerBanner
+            .querySelector(".winner-medal")
+            .appendChild(medal.cloneNode(true));
           winnerBanner.querySelector(".winner-box").style.backgroundColor =
             winner.color;
           winnerBanner.classList.add("display");
