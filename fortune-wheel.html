@@ -2232,10 +2232,10 @@
       generateWheel();
 
       goButton.addEventListener("click", (e) => {
+        const index = Math.floor(Math.random() * team.length);
         e.target.setAttribute("disabled", true);
         wheelContainer.style.transition = `rotate ${rotatingMilliseconds}ms`;
-        const angle =
-          (360 / team.length) * Math.floor(Math.random() * team.length);
+        const angle = (360 / team.length) * index;
 
         degrees += 360 * 7 + angle;
 
@@ -2248,10 +2248,7 @@
 
         const medal = medalList[medalIndex].cloneNode(true);
         setTimeout(() => {
-          const winnerIndex =
-            team.length -
-            1 -
-            Math.round(((degrees - angleMargin) % 360) / (360 / team.length));
+          const winnerIndex = team.length - 1 - index;
 
           const winner = team.splice(winnerIndex, 1)[0];
 
