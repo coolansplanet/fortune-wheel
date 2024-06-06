@@ -2232,9 +2232,9 @@
       generateWheel();
 
       goButton.addEventListener("click", (e) => {
-        const index = Math.floor(Math.random() * team.length);
         e.target.setAttribute("disabled", true);
         wheelContainer.style.transition = `rotate ${rotatingMilliseconds}ms`;
+        const index = Math.floor(Math.random() * team.length);
         const angle = (360 / team.length) * index;
 
         degrees += 360 * 7 + angle;
