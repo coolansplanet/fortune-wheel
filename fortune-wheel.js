@@ -50,7 +50,7 @@ const colors = ["#FFAEBC", "#FBE7C6", "#B4F8C8", "#A0E7E5"];
 
 const winners = [];
 
-const medalList = Array.from(document.querySelectorAll(".medal")).map(
+const medalList = Array.from(document.querySelectorAll("#medals .medal")).map(
   (oneMedal) => oneMedal.src
 );
 
@@ -278,16 +278,14 @@ goButton.addEventListener("click", (e) => {
 
     winnerBanner.querySelector(".winner-name").innerHTML = winner.name;
     winnerBanner.querySelector(".winner-medal").innerHTML = "";
-    winnerBanner
-      .querySelector(".winner-medal")
-      .appendChild(medal.cloneNode(true));
+    winnerBanner.querySelector(".winner-medal").appendChild(medal);
     winnerBanner.querySelector(".winner-box").style.backgroundColor =
       winner.color;
     winnerBanner.classList.add("display");
-    addWinnerToList(winner, medal);
+    addWinnerToList(winner, medal.cloneNode(true));
     if (team.length === 1) {
       const lastMedal = document.createElement("img");
-      medal.src = medalList[medalList.length - 1];
+      lastMedal.src = medalList[medalList.length - 1];
       addWinnerToList(team.pop(), lastMedal);
       wheelContainer.style.opacity = 0.2;
     } else {
