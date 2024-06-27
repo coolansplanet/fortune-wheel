@@ -315,6 +315,24 @@
         font-weight: 400;
       }
 
+      .settings-box button.ok {
+        background-color: #1773c4;
+        color: white;
+        font-size: 1vw;
+        font-weight: 700;
+        position: absolute;
+        bottom: 0.5vw;
+        right: 0.5vw;
+        padding: 0.3vw 0.8vw 0.3vw 0.8vw;
+        border: none;
+        border-radius: 0.3vw;
+        cursor: pointer;
+      }
+
+      .settings-box button.ok:hover {
+        background-color: #5499d6;
+      }
+
       .settings-box-team-list {
         list-style-type: none;
         padding: 0;
@@ -2242,6 +2260,7 @@
             <input type="text" placeholder="Insert new name..." />
           </li>
         </ul>
+        <button class="ok">OK</button>
       </div>
     </div>
     <script>
@@ -2319,6 +2338,7 @@
       const winnerBanner = document.querySelector(".winner");
       const settingsScreen = document.querySelector(".settings");
       const settingsBox = document.querySelector(".settings-box");
+      const okButton = document.querySelector(".settings-box .ok");
 
       const rootStyle = getComputedStyle(document.documentElement);
 
@@ -2546,6 +2566,10 @@
       });
 
       settingsScreen.addEventListener("click", (e) => {
+        settingsScreen.classList.remove("display");
+      });
+
+      okButton.addEventListener("click", (e) => {
         settingsScreen.classList.remove("display");
       });
 
