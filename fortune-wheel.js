@@ -1,17 +1,12 @@
 const defaultTeamMembers = [
-  { name: "Amy", isEnabled: true },
-  { name: "Emma", isEnabled: true },
-  { name: "Fiona", isEnabled: true },
-  { name: "Herman", isEnabled: true },
-  { name: "Miriam", isEnabled: true },
-  { name: "Natasha", isEnabled: true },
-  { name: "Niti", isEnabled: true },
-  { name: "Orestis", isEnabled: true },
-  { name: "Paddy", isEnabled: true },
-  { name: "Piotr", isEnabled: true },
-  { name: "Priyanka", isEnabled: true },
-  { name: "Ricardo", isEnabled: true },
-  { name: "Sean", isEnabled: true },
+  { name: "Example 1", isEnabled: true },
+  { name: "Example 2", isEnabled: true },
+  { name: "Example 3", isEnabled: true },
+  { name: "Example 4", isEnabled: true },
+  { name: "Example 5", isEnabled: true },
+  { name: "Example 6", isEnabled: true },
+  { name: "Example 7", isEnabled: true },
+  { name: "Example 8", isEnabled: true },
 ];
 
 const stringifiedMembers = localStorage.getItem("allMembers");
