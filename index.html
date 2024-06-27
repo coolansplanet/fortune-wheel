@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      rel="icon"
+      href="https://assets.awwwards.com/assets/images/favicon.svg"
+      type="image/svg+xml"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Fortune Wheel</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+  </head>
+  <body>
+    <div style="display: none" id="medals">
+      <img src="images/medal-gold.svg" class="medal" />
+      <img src="images/medal-silver.svg" class="medal" />
+      <img src="images/medal-bronze.svg" class="medal" />
+      <img src="images/medal-wood.svg" class="medal" />
+      <img src="images/medal-paper.svg" class="medal" />
+      <img src="images/medal-toilet-paper.svg" class="medal" />
+      <img src="images/medal-toilet-paperless.svg" class="medal" />
+      <img src="images/medal-hcl-notes.svg" class="medal" />
+    </div>
+    <div class="container">
+      <div class="wheel-side">
+        <div class="wheel-wrapper">
+          <div class="wheel-container">
+            <svg
+              viewBox="0 0 20 20"
+              version="1.1"
+              id="wheel"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:svg="http://www.w3.org/2000/svg"
+            ></svg>
+          </div>
+        </div>
+        <div class="indicator"></div>
+        <button class="go-button">GO!</button>
+        <button class="gear-button">
+          <img src="images/gear.svg" />
+        </button>
+      </div>
+      <div class="list-side"></div>
+    </div>
+    <div class="winner">
+      <div class="winner-overlay"></div>
+      <div class="winner-box">
+        <div class="winner-medal"></div>
+        <p class="winner-name"></p>
+      </div>
+    </div>
+    <div class="settings">
+      <div class="settings-overlay"></div>
+      <div class="settings-box">
+        <h3>Team members:</h3>
+        <ul class="settings-box-team-list">
+          <li class="new-member">
+            <input type="text" placeholder="Insert new name..." />
+          </li>
+        </ul>
+        <button class="ok">OK</button>
+      </div>
+    </div>
+    <script src="fortune-wheel.js"></script>
+  </body>
+</html>

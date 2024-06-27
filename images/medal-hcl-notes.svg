@@ -1,0 +1,117 @@
+<svg
+        viewBox="0 0 50.270834 50.270833"
+        version="1.1"
+        id="hcl-notes-medal"
+        class="medal"
+        xml:space="preserve"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:svg="http://www.w3.org/2000/svg"
+      >
+        <defs id="defs1">
+          <linearGradient id="a">
+            <stop
+              style="stop-color: #1773c4; stop-opacity: 1"
+              offset="0"
+              id="stop6"
+            />
+            <stop
+              style="stop-color: #4748c4; stop-opacity: 1"
+              offset="1"
+              id="stop7"
+            />
+          </linearGradient>
+          <linearGradient id="linearGradient3">
+            <stop
+              style="stop-color: #1773c4; stop-opacity: 1"
+              offset="0"
+              id="stop3"
+            />
+            <stop
+              style="stop-color: #4748c4; stop-opacity: 1"
+              offset="1"
+              id="stop4"
+            />
+          </linearGradient>
+          <linearGradient
+            xlink:href="#linearGradient3"
+            id="linearGradient4"
+            x1="104.96454"
+            y1="125.51432"
+            x2="114.76115"
+            y2="125.5526"
+            gradientUnits="userSpaceOnUse"
+          />
+          <linearGradient
+            xlink:href="#a"
+            id="b"
+            x1="38.899567"
+            y1="117.46167"
+            x2="73.413734"
+            y2="152.4722"
+            gradientUnits="userSpaceOnUse"
+            gradientTransform="matrix(1.0305129,0,0,1.0305129,53.577695,-4.1979855)"
+          />
+        </defs>
+        <g id="layer1">
+          <g
+            id="g7"
+            transform="matrix(0.95342668,0,0,0.95342668,-74.774517,-96.250847)"
+          >
+            <rect
+              style="
+                font-variation-settings: normal;
+                opacity: 1;
+                fill: #131a22;
+                fill-opacity: 1;
+                stroke: url(#b);
+                stroke-width: 2.08988;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                stroke-miterlimit: 4;
+                stroke-dasharray: none;
+                stroke-dashoffset: 0;
+                stroke-opacity: 1;
+                stop-color: #000000;
+                stop-opacity: 1;
+              "
+              id="rect4"
+              width="50.6366"
+              height="50.6366"
+              x="79.472069"
+              y="101.99748"
+              ry="0.76670128"
+            />
+            <path
+              style="
+                fill: #93a3b0;
+                fill-opacity: 1;
+                stroke-width: 0.428128;
+                -inkscape-stroke: none;
+              "
+              d="M 105.03304,141.47086 92.957535,140.42168 85.42734,123.40514 92.153019,113.00389 Z"
+              id="path1"
+            />
+            <path
+              style="
+                fill: url(#linearGradient4);
+                fill-opacity: 1;
+                stroke-width: 0.428128;
+                -inkscape-stroke: none;
+              "
+              d="m 106.35646,137.31485 -6.899499,-15.22925 4.736979,-8.29524 10.56721,23.40706 z"
+              id="path2"
+            />
+            <path
+              style="
+                fill: #93a3b0;
+                fill-opacity: 1;
+                stroke-width: 0.428128;
+                -inkscape-stroke: none;
+              "
+              d="m 116.18365,114.37424 8.25559,18.36552 -7.99409,0.70943 -5.74446,-12.62621 z"
+              id="path3"
+            />
+          </g>
+        </g>
+      </svg>

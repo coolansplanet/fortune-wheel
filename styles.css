@@ -1,0 +1,383 @@
+:root {
+  --bg-color: #232324;
+  --left-side-color: #2b2b31;
+  --button-color: transparent;
+  --button-hover-color: #fa0032;
+  --list-text-color: #fefefe;
+  --list-line-color: #fefefe80;
+  --button-text-color: white;
+  --wheel-diameter: 40vw;
+  --hole-diameter: 5vw;
+  --button-diameter: 5vw;
+  --gear-diameter: 3vw;
+  --winner-animation-time: 400ms;
+  --main-font: "Roboto", sans-serif;
+  --wheel-borders: 1vw solid #fefefe;
+}
+body,
+html {
+  background-color: var(--bg-color);
+  display: grid;
+  min-height: 100%;
+  justify-content: center;
+  align-content: center;
+  font-family: var(--main-font);
+  font-weight: 400;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  position: relative;
+}
+
+.wheel-side {
+  width: 50vw;
+  height: 40vw;
+  position: relative;
+}
+
+.list-side {
+  width: 25vw;
+  background-color: var(--left-side-color);
+  padding: 1vw;
+}
+
+.list-side .winner-element {
+  display: grid;
+  grid-template-columns: 1fr 2em;
+  color: var(--list-text-color);
+  text-align: left;
+  font-size: 1.5vw;
+  font-weight: 700;
+  margin: 0;
+  padding: 1vw;
+}
+.list-side .winner-element p {
+  line-height: 2em;
+  margin: 0;
+  padding: 0;
+}
+
+.list-side .winner-element::selection {
+  background-color: var(--list-text-color);
+  color: var(--left-side-color);
+}
+.list-side .winner-element + .winner-element {
+  border-top: 0.1vw solid var(--list-line-color);
+}
+
+.list-side .winner-element:first-child {
+  background-color: var(--list-text-color);
+  box-shadow: 0 0 5vw var(--list-text-color);
+  color: var(--left-side-color);
+}
+.list-side .winner-element:first-child::selection {
+  background-color: var(--left-side-color);
+  color: var(--list-text-color);
+}
+
+.wheel-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--wheel-diameter);
+  height: var(--wheel-diameter);
+  translate: -50% -50%;
+  border-radius: var(--wheel-diameter);
+  transition: opacity var(--winner-animation-time);
+}
+.wheel-wrapper {
+  overflow: hidden;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+#wheel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.wheel-container::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: var(--wheel-borders);
+  border-radius: var(--wheel-diameter);
+  z-index: 4;
+}
+
+.wheel-container::after {
+  content: "";
+  display: inline-block;
+  width: var(--hole-diameter);
+  height: var(--hole-diameter);
+  background-color: var(--bg-color);
+  border: var(--wheel-borders);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  border-radius: var(--hole-diameter);
+}
+
+.gear-button {
+  position: absolute;
+  right: 2vw;
+  top: 0vw;
+  width: var(--gear-diameter);
+  height: var(--gear-diameter);
+  background-color: transparent;
+  border: none;
+  opacity: 0.5;
+  cursor: pointer;
+}
+.gear-button:hover {
+  opacity: 0.9;
+}
+
+.gear-button:disabled {
+  opacity: 0.2;
+}
+
+.go-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  background-color: var(--button-color);
+  color: var(--button-text-color);
+  border: none;
+  width: var(--button-diameter);
+  height: var(--button-diameter);
+  border-radius: var(--button-diameter);
+  cursor: pointer;
+  font-weight: 900;
+  font-family: var(--main-font);
+  font-size: 2vw;
+  user-select: none;
+  transition: opacity 300ms;
+}
+.go-button:hover {
+  background-color: var(--button-hover-color);
+  box-shadow: 0 0 2vw var(--button-hover-color);
+  text-shadow: 0 0 2vw var(--button-text-color);
+}
+.go-button:disabled {
+  opacity: 0;
+}
+
+.go-button:disabled:hover {
+  box-shadow: none;
+  text-shadow: none;
+  background-color: var(--button-color);
+}
+
+.indicator {
+  position: absolute;
+  top: 50%;
+  right: 1vw;
+  width: 7vw;
+  height: 0.5vw;
+  background-color: var(--bg-color);
+  display: inline-block;
+  translate: 0 -50%;
+  border-radius: 0.5vw;
+  box-shadow: 0 0 3vw white;
+  border: 0.1vw solid rgba(255, 255, 255, 0.55);
+}
+
+.name {
+  color: var(--bg-color);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: 0 50%;
+  translate: 0 -50%;
+  font-size: 1.8vw;
+  padding: 0 0 0 3em;
+  margin: 0;
+  width: 50%;
+  text-align: left;
+  font-weight: 700;
+  opacity: 0.8;
+  user-select: none;
+}
+.winner,
+.settings {
+  display: inline-block;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  padding: 0;
+  margin: 0;
+  top: 0;
+  left: 0;
+  user-select: none;
+}
+.winner.display,
+.settings.display {
+  pointer-events: auto;
+  padding: 0;
+  margin: 0;
+}
+
+.winner-overlay,
+.settings-overlay {
+  background-color: var(--bg-color);
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity var(--winner-animation-time);
+  padding: 0;
+  margin: 0;
+}
+
+.winner.display .winner-overlay,
+.settings.display .settings-overlay {
+  opacity: 0.7;
+}
+.winner-box,
+.settings-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 50vw;
+  height: 25vw;
+  scale: 0.01;
+  opacity: 0;
+  z-index: 5000;
+  display: grid;
+  align-content: center;
+  box-sizing: border-box;
+  border: var(--wheel-borders);
+  border-radius: 1.7vw;
+  gap: 2vw;
+  transition: opacity var(--winner-animation-time),
+    scale var(--winner-animation-time);
+}
+.winner.display .winner-box,
+.settings.display .settings-box {
+  opacity: 1;
+  scale: 1;
+}
+.winner-medal {
+  height: 8vw;
+  margin: 0;
+  display: grid;
+  justify-items: center;
+}
+
+.winner-medal img {
+  height: 8vw;
+  width: auto;
+}
+.winner-name {
+  font-size: 5vw;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0;
+  color: var(--bg-color);
+  font-weight: 900;
+}
+
+.settings-box {
+  background-color: var(--list-text-color);
+  align-content: start;
+  gap: 1vw;
+}
+
+.settings-box h3 {
+  margin: 0.2em 0 0 0;
+  font-size: 1.5vw;
+  font-weight: 400;
+}
+
+.settings-box button.ok {
+  background-color: #1773c4;
+  color: white;
+  font-size: 0.8vw;
+  font-weight: 700;
+  position: absolute;
+  bottom: 0.5vw;
+  right: 0.5vw;
+  padding: 0.4vw 1.4vw 0.4vw 1.4vw;
+  border: none;
+  border-radius: 0.3vw;
+  cursor: pointer;
+}
+
+.settings-box button.ok:hover {
+  background-color: #5499d6;
+}
+
+.settings-box-team-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  height: 17vw;
+  columns: auto 3;
+  column-rule: 0.1vw solid #cccccc;
+  column-fill: auto;
+}
+.settings-box-team-list li {
+  display: grid;
+  gap: 0.5vw;
+  grid-template-columns: max-content 10vw max-content;
+  align-items: center;
+  height: 2vw;
+}
+.settings-box-team-list input[type="checkbox"] {
+  width: 1vw;
+  height: 1vw;
+}
+.settings-box-team-list label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: 1.1vw;
+}
+.settings-box-team-list button {
+  width: 1vw;
+  height: 1vw;
+  background-color: #bb0000;
+  border: none;
+  border-radius: 0.2vw;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  cursor: pointer;
+}
+
+.settings-box-team-list button:hover {
+  background-color: red;
+}
+.settings-box-team-list button:after {
+  display: inline-block;
+  content: "\00d7";
+  color: white;
+  font-size: 1.5vw;
+  font-weight: bold;
+}
+
+.settings-box-team-list .new-member {
+  display: block;
+}
+
+.settings-box-team-list .new-member input {
+  width: 100%;
+  border: 1px solid #333333;
+  border-radius: 0.2vw;
+  height: 1.4vw;
+  font-size: 1.1vw;
+  margin-top: 0.4vw;
+}
