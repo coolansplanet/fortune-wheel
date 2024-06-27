@@ -19,7 +19,7 @@
       :root {
         --bg-color: #232324;
         --left-side-color: #2b2b31;
-        --button-color: #d2042d;
+        --button-color: transparent;
         --button-hover-color: #fa0032;
         --list-text-color: #fefefe;
         --list-line-color: #fefefe80;
@@ -27,6 +27,7 @@
         --wheel-diameter: 40vw;
         --hole-diameter: 5vw;
         --button-diameter: 5vw;
+        --gear-diameter: 3vw;
         --winner-animation-time: 400ms;
         --main-font: "Roboto", sans-serif;
         --wheel-borders: 1vw solid #fefefe;
@@ -144,10 +145,26 @@
         border-radius: var(--hole-diameter);
       }
 
-      .go-button {
+      .gear-button {
         position: absolute;
         right: 2vw;
         top: 0vw;
+        width: var(--gear-diameter);
+        height: var(--gear-diameter);
+        background-color: transparent;
+        border: none;
+        opacity: 0.5;
+        cursor: pointer;
+      }
+      .gear-button:hover {
+        opacity: 0.9;
+      }
+
+      .go-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        translate: -50% -50%;
         background-color: var(--button-color);
         color: var(--button-text-color);
         border: none;
@@ -159,6 +176,7 @@
         font-family: var(--main-font);
         font-size: 2vw;
         user-select: none;
+        transition: opacity 300ms;
       }
       .go-button:hover {
         background-color: var(--button-hover-color);
@@ -166,7 +184,7 @@
         text-shadow: 0 0 2vw var(--button-text-color);
       }
       .go-button:disabled {
-        opacity: 0.3;
+        opacity: 0;
       }
 
       .go-button:disabled:hover {
@@ -205,7 +223,8 @@
         opacity: 0.8;
         user-select: none;
       }
-      .winner {
+      .winner,
+      .settings {
         display: inline-block;
         position: fixed;
         width: 100%;
@@ -217,12 +236,15 @@
         left: 0;
         user-select: none;
       }
-      .winner.display {
+      .winner.display,
+      .settings.display {
         pointer-events: auto;
         padding: 0;
         margin: 0;
       }
-      .winner-overlay {
+
+      .winner-overlay,
+      .settings-overlay {
         background-color: var(--bg-color);
         opacity: 0;
         width: 100%;
@@ -231,10 +253,13 @@
         padding: 0;
         margin: 0;
       }
-      .winner.display .winner-overlay {
+
+      .winner.display .winner-overlay,
+      .settings.display .settings-overlay {
         opacity: 0.7;
       }
-      .winner-box {
+      .winner-box,
+      .settings-box {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -253,7 +278,8 @@
         transition: opacity var(--winner-animation-time),
           scale var(--winner-animation-time);
       }
-      .winner.display .winner-box {
+      .winner.display .winner-box,
+      .settings.display .settings-box {
         opacity: 1;
         scale: 1;
       }
@@ -275,6 +301,81 @@
         margin: 0;
         color: var(--bg-color);
         font-weight: 900;
+      }
+
+      .settings-box {
+        background-color: var(--list-text-color);
+        align-content: start;
+        gap: 1vw;
+      }
+
+      .settings-box h3 {
+        margin: 0.2em 0 0 0;
+        font-size: 1.5vw;
+        font-weight: 400;
+      }
+
+      .settings-box-team-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        height: 17vw;
+        columns: auto 3;
+        column-rule: 0.1vw solid #cccccc;
+        column-fill: auto;
+      }
+      .settings-box-team-list li {
+        display: grid;
+        gap: 0.5vw;
+        grid-template-columns: max-content 10vw max-content;
+        align-items: center;
+        height: 2vw;
+      }
+      .settings-box-team-list input[type="checkbox"] {
+        width: 1vw;
+        height: 1vw;
+      }
+      .settings-box-team-list label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 1.1vw;
+      }
+      .settings-box-team-list button {
+        width: 1vw;
+        height: 1vw;
+        background-color: #bb0000;
+        border: none;
+        border-radius: 0.2vw;
+        display: grid;
+        justify-content: center;
+        align-content: center;
+        cursor: pointer;
+      }
+
+      .settings-box-team-list button:hover {
+        background-color: red;
+      }
+      .settings-box-team-list button:after {
+        display: inline-block;
+        content: "\00d7";
+        color: white;
+        font-size: 1.5vw;
+        font-weight: bold;
+      }
+
+      .settings-box-team-list .new-member {
+        display: block;
+      }
+
+      .settings-box-team-list .new-member input {
+        width: 100%;
+        border: 1px solid #333333;
+        border-radius: 0.2vw;
+        height: 1.4vw;
+        font-size: 1.1vw;
+        margin-top: 0.4vw;
       }
     </style>
   </head>
@@ -2106,6 +2207,22 @@
         </div>
         <div class="indicator"></div>
         <button class="go-button">GO!</button>
+        <button class="gear-button">
+          <svg
+            viewBox="0 0 24 24"
+            version="1.1"
+            id="gear-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:svg="http://www.w3.org/2000/svg"
+          >
+            <defs id="defs1" />
+            <path
+              d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6"
+              id="path1"
+              style="fill: #f9f9f9"
+            />
+          </svg>
+        </button>
       </div>
       <div class="list-side"></div>
     </div>
@@ -2116,19 +2233,65 @@
         <p class="winner-name"></p>
       </div>
     </div>
+    <div class="settings">
+      <div class="settings-overlay"></div>
+      <div class="settings-box">
+        <h3>Team members:</h3>
+        <ul class="settings-box-team-list">
+          <li class="new-member">
+            <input type="text" placeholder="Insert new name..." />
+          </li>
+        </ul>
+      </div>
+    </div>
     <script>
-      const team = [
-        //{ name: "Fiona" },
-        { name: "Herman" },
-        //{ name: "Miriam" },
-        //{ name: "Natasha" },
-        { name: "Niti" },
-        { name: "Orestis" },
-        { name: "Piotr" },
-        { name: "Priyanka" },
-        { name: "Ricardo" },
-        { name: "Sean" },
+      const defaultTeamMembers = [
+        { name: "Amy", isEnabled: true },
+        { name: "Emma", isEnabled: true },
+        { name: "Fiona", isEnabled: true },
+        { name: "Herman", isEnabled: true },
+        { name: "Miriam", isEnabled: true },
+        { name: "Natasha", isEnabled: true },
+        { name: "Niti", isEnabled: true },
+        { name: "Orestis", isEnabled: true },
+        { name: "Paddy", isEnabled: true },
+        { name: "Piotr", isEnabled: true },
+        { name: "Priyanka", isEnabled: true },
+        { name: "Ricardo", isEnabled: true },
+        { name: "Sean", isEnabled: true },
       ];
+
+      const stringifiedMembers = localStorage.getItem("allMembers");
+      const allMembers = [];
+      const team = [];
+
+      const saveFullList = () => {
+        localStorage.setItem(
+          "allMembers",
+          JSON.stringify(allMembers.map(({ li, ...rest }) => rest))
+        );
+      };
+
+      if (!!stringifiedMembers) {
+        JSON.parse(stringifiedMembers).forEach((oneMember) =>
+          allMembers.push(oneMember)
+        );
+      } else {
+        localStorage.setItem("allMembers", JSON.stringify(defaultTeamMembers));
+        defaultTeamMembers.forEach((oneMember) => allMembers.push(oneMember));
+      }
+
+      const settingsBoxTeamElement = document.querySelector(
+        ".settings-box-team-list"
+      );
+
+      const newMemberItem = document.querySelector(
+        ".settings-box-team-list .new-member"
+      );
+
+      const newMemberInput = document.querySelector(
+        ".settings-box-team-list .new-member input"
+      );
 
       const colors = ["#FFAEBC", "#FBE7C6", "#B4F8C8", "#A0E7E5"];
 
@@ -2151,8 +2314,11 @@
       const wheel = document.querySelector("#wheel");
       const wheelContainer = document.querySelector(".wheel-container");
       const goButton = document.querySelector(".go-button");
+      const settingsButton = document.querySelector(".gear-button");
       const list = document.querySelector(".list-side");
       const winnerBanner = document.querySelector(".winner");
+      const settingsScreen = document.querySelector(".settings");
+      const settingsBox = document.querySelector(".settings-box");
 
       const rootStyle = getComputedStyle(document.documentElement);
 
@@ -2187,6 +2353,13 @@
         list.append(winnerElement);
         winners.push(winner);
       };
+
+      const sortItems = (list) =>
+        list.sort((a, b) => {
+          const nameA = a.name.toLowerCase();
+          const nameB = b.name.toLowerCase();
+          return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+        });
 
       const generateWheel = () => {
         angleMargin = Math.round(360 / (team.length * 2));
@@ -2229,6 +2402,100 @@
 
         degrees = angleMargin;
       };
+
+      const removeItem = (name, list) => {
+        const index = list.findIndex((oneMember) => oneMember.name === name);
+        index >= 0 && list.splice(index, 1);
+      };
+
+      const addMemberAsElement = (oneItem, id) => {
+        const listItem = document.createElement("li");
+        const checkbox = document.createElement("input");
+        const text = document.createElement("label");
+        const button = document.createElement("button");
+        checkbox.setAttribute("type", "checkbox");
+        checkbox.setAttribute("id", id);
+        checkbox.checked = oneItem.isEnabled;
+
+        button.addEventListener("click", () => {
+          const theUserIsSure = confirm(
+            `Are you sure you want to remove ${oneItem.name} from the list?`
+          );
+          if (theUserIsSure) {
+            removeItem(oneItem.name, allMembers);
+            removeItem(oneItem.name, team);
+            settingsBoxTeamElement.removeChild(oneItem.li);
+            generateWheel();
+            saveFullList();
+          }
+        });
+        checkbox.addEventListener("change", (e) => {
+          const member = allMembers.find(
+            (oneMember) => oneMember.name === oneItem.name
+          );
+          member.isEnabled = e.target.checked;
+          if (e.target.checked) {
+            team.push(member);
+            sortItems(team);
+          } else {
+            removeItem(oneItem.name, team);
+          }
+          generateWheel();
+          saveFullList();
+        });
+        text.setAttribute("for", id);
+        text.append(oneItem.name);
+        listItem.appendChild(checkbox);
+        listItem.appendChild(text);
+        listItem.appendChild(button);
+        settingsBoxTeamElement.insertBefore(listItem, newMemberItem);
+        oneItem.li = listItem;
+      };
+
+      newMemberInput.addEventListener("keydown", (e) => {
+        const text = e.target.value;
+        if (
+          e.key === "Enter" &&
+          !!text &&
+          typeof text === "string" &&
+          text.length > 0
+        ) {
+          if (
+            allMembers.find(
+              (oneMember) => oneMember.name.toLowerCase() === text.toLowerCase()
+            )
+          ) {
+            alert(
+              "That name is already in the list, please use a different one"
+            );
+            return null;
+          }
+
+          const newItem = {
+            name: text
+              .split(" ")
+              .map(
+                (oneFragment) =>
+                  oneFragment.charAt(0).toUpperCase() +
+                  oneFragment.slice(1).toLocaleLowerCase()
+              )
+              .join(" "),
+            isEnabled: true,
+          };
+          allMembers.push(newItem);
+          sortItems(allMembers);
+          saveFullList();
+          addMemberAsElement(newItem, "member-" + text);
+          team.push(newItem);
+          sortItems(team);
+          generateWheel();
+          newMemberInput.value = "";
+        }
+      });
+      allMembers.forEach((oneMember, index) => {
+        addMemberAsElement(oneMember, "member-" + index);
+        oneMember.isEnabled && team.push(oneMember);
+      });
       generateWheel();
 
       goButton.addEventListener("click", (e) => {
@@ -2272,6 +2539,18 @@
             }, winnerAnimationMilliseconds);
           }
         }, rotatingMilliseconds);
+      });
+
+      settingsButton.addEventListener("click", (e) => {
+        settingsScreen.classList.add("display");
+      });
+
+      settingsScreen.addEventListener("click", (e) => {
+        settingsScreen.classList.remove("display");
+      });
+
+      settingsBox.addEventListener("click", (e) => {
+        e.stopPropagation();
       });
     </script>
   </body>
