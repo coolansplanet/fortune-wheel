@@ -1,14 +1,14 @@
 :root {
   --bg-color: #232324;
   --right-side-color: #2b2b31;
-  --button-color: #d2042d;
-  --button-hover-color: #fa0032;
-  --button-text-color: white;
+  --go-button-color: #d2042d;
+  --go-button-hover-color: #fa0032;
+  --go-button-text-color: white;
   --list-text-color: #fefefe;
   --list-line-color: #fefefe80;
   --wheel-diameter: 40vw;
   --hole-diameter: 5vw;
-  --button-diameter: 5vw;
+  --go-button-diameter: 5vw;
   --gear-diameter: 3vw;
   --winner-animation-time: 400ms;
   --main-font: "Roboto", sans-serif;
@@ -128,9 +128,6 @@ html {
 }
 
 .gear-button {
-  position: absolute;
-  right: 3vw;
-  top: 5.8vw;
   width: var(--gear-diameter);
   height: var(--gear-diameter);
   background-color: transparent;
@@ -146,16 +143,21 @@ html {
   opacity: 0.2;
 }
 
-.go-button {
+.buttons {
   position: absolute;
   right: 2vw;
   top: 0vw;
-  background-color: var(--button-color);
-  color: var(--button-text-color);
+  display: grid;
+  justify-items: center;
+  gap: 0.8vw;
+}
+.go-button {
+  background-color: var(--go-button-color);
+  color: var(--go-button-text-color);
   border: none;
-  width: var(--button-diameter);
-  height: var(--button-diameter);
-  border-radius: var(--button-diameter);
+  width: var(--go-button-diameter);
+  height: var(--go-button-diameter);
+  border-radius: var(--go-button-diameter);
   cursor: pointer;
   font-weight: 900;
   font-family: var(--main-font);
@@ -163,9 +165,9 @@ html {
   user-select: none;
 }
 .go-button:hover {
-  background-color: var(--button-hover-color);
-  box-shadow: 0 0 2vw var(--button-hover-color);
-  text-shadow: 0 0 2vw var(--button-text-color);
+  background-color: var(--go-button-hover-color);
+  box-shadow: 0 0 2vw var(--go-button-hover-color);
+  text-shadow: 0 0 2vw var(--go-button-text-color);
 }
 .go-button:disabled {
   background-color: #37373f;
