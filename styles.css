@@ -305,6 +305,18 @@ html {
   margin: 0;
   font-size: 1.5vw;
   font-weight: 400;
+  text-align: center;
+  position: relative;
+}
+
+.settings-box h3::after {
+  content: "";
+  position: absolute;
+  bottom: -0.5vw;
+  width: 100%;
+  left: 0;
+  height: 0.04vw;
+  background-color: #00000077;
 }
 
 .settings-box button.ok {
