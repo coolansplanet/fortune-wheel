@@ -339,7 +339,7 @@ html {
 .settings-box-team-list li {
   display: grid;
   gap: 0.5vw;
-  grid-template-columns: max-content 10vw max-content;
+  grid-template-columns: max-content 7vw max-content;
   align-items: center;
   height: 2vw;
 }
@@ -383,7 +383,7 @@ html {
 }
 
 .settings-box-team-list .new-member input {
-  width: 100%;
+  width: 10.1vw;
   border: 1px solid #333333;
   border-radius: 0.2vw;
   height: 1.4vw;
