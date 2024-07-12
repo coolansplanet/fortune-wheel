@@ -98,7 +98,12 @@ const addWinnerToList = (winner, medal) => {
   winnerElement.append(medal);
   winnerElement.style.height = 50;
   element.list.append(winnerElement);
-  winners.push(winner);
+  winners.push({ name: winner.name, element: winnerElement });
+};
+
+const removeWinnerFromList = (name) => {
+  const index = winners.findIndex((oneWinner) => oneWinner.name === name);
+  index >= 0 && element.list.removeChild(winners.splice(index, 1)[0].element);
 };
 
 const sortItems = (list) =>
@@ -171,6 +176,7 @@ const addMemberAsElement = (oneItem, id) => {
     if (theUserIsSure) {
       removeItem(oneItem.name, allMembers);
       removeItem(oneItem.name, team);
+      removeWinnerFromList(oneItem.name);
       element.settingsBoxTeam.removeChild(oneItem.li);
       generateWheel();
       saveFullList();
@@ -186,6 +192,7 @@ const addMemberAsElement = (oneItem, id) => {
       sortItems(team);
     } else {
       removeItem(oneItem.name, team);
+      removeWinnerFromList(oneItem.name);
     }
     generateWheel();
     saveFullList();
