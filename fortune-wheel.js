@@ -1,3 +1,6 @@
+const stringifiedMembers = localStorage.getItem("allMembers");
+const allMembers = [];
+const players = [];
 const defaultPlayers = [
   { name: "Example 1", isEnabled: true },
   { name: "Example 2", isEnabled: true },
@@ -9,25 +12,19 @@ const defaultPlayers = [
   { name: "Example 8", isEnabled: true },
 ];
 
-const stringifiedMembers = localStorage.getItem("allMembers");
-const allMembers = [];
-const players = [];
+const colors = ["#FFAEBC", "#FBE7C6", "#B4F8C8", "#A0E7E5"];
 
-const saveFullList = () => {
-  localStorage.setItem(
-    "allMembers",
-    JSON.stringify(allMembers.map(({ li, ...rest }) => rest))
-  );
+const rotatingMilliseconds = 5000;
+
+const wheelRadius = 5;
+
+const fragmentStaticAttributes = {
+  r: wheelRadius,
+  cx: wheelRadius * 2,
+  cy: wheelRadius * 2,
+  fill: "transparent",
+  "stroke-width": wheelRadius * 2,
 };
-
-if (!!stringifiedMembers) {
-  JSON.parse(stringifiedMembers).forEach((oneMember) =>
-    allMembers.push(oneMember)
-  );
-} else {
-  localStorage.setItem("allMembers", JSON.stringify(defaultPlayers));
-  defaultPlayers.forEach((oneMember) => allMembers.push(oneMember));
-}
 
 const element = {
   settingsBoxTeam: document.querySelector(".settings-box-team-list"),
@@ -46,46 +43,18 @@ const element = {
   ),
 };
 
-const colors = ["#FFAEBC", "#FBE7C6", "#B4F8C8", "#A0E7E5"];
-
-const medalList = Array.from(document.querySelectorAll("#medals .medal")).map(
-  (oneMedal) => oneMedal.src
-);
-
-const rotatingMilliseconds = 5000;
-
-const wheelRadius = 5;
-
-const fragmentStaticAttributes = {
-  r: wheelRadius,
-  cx: wheelRadius * 2,
-  cy: wheelRadius * 2,
-  fill: "transparent",
-  "stroke-width": wheelRadius * 2,
-};
-
 const rootStyle = getComputedStyle(document.documentElement);
 
 const winnerAnimationMilliseconds = parseInt(
   rootStyle.getPropertyValue("--winner-animation-time")
 );
 
-element.winnerBanner.addEventListener("click", (e) => {
-  players.length > 1 && element.goButton.removeAttribute("disabled");
-  element.settingsButton.removeAttribute("disabled");
-  element.winnerBanner.classList.remove("display");
-});
+const medalList = Array.from(document.querySelectorAll("#medals .medal")).map(
+  (oneMedal) => oneMedal.src
+);
 
 let angleMargin;
 let degrees;
-
-const setAttributes = (element, attributes = {}, ns = false) => {
-  Object.entries(attributes).forEach(([name, value]) => {
-    ns
-      ? element.setAttributeNS(null, name, value)
-      : element.setAttribute(name, value);
-  });
-};
 
 const winners = {
   array: [],
@@ -109,12 +78,42 @@ const winners = {
   },
 };
 
+const saveFullList = () => {
+  localStorage.setItem(
+    "allMembers",
+    JSON.stringify(allMembers.map(({ li, ...rest }) => rest))
+  );
+};
+
+const setAttributes = (element, attributes = {}, ns = false) => {
+  Object.entries(attributes).forEach(([name, value]) => {
+    ns
+      ? element.setAttributeNS(null, name, value)
+      : element.setAttribute(name, value);
+  });
+};
+
 const sortItems = (list) =>
   list.sort((a, b) => {
     const nameA = a.name.toLowerCase();
     const nameB = b.name.toLowerCase();
     return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
   });
+
+if (!!stringifiedMembers) {
+  JSON.parse(stringifiedMembers).forEach((oneMember) =>
+    allMembers.push(oneMember)
+  );
+} else {
+  localStorage.setItem("allMembers", JSON.stringify(defaultPlayers));
+  defaultPlayers.forEach((oneMember) => allMembers.push(oneMember));
+}
+
+element.winnerBanner.addEventListener("click", () => {
+  players.length > 1 && element.goButton.removeAttribute("disabled");
+  element.settingsButton.removeAttribute("disabled");
+  element.winnerBanner.classList.remove("display");
+});
 
 const generateWheel = () => {
   angleMargin = Math.round(360 / (players.length * 2));
