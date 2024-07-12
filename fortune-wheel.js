@@ -78,6 +78,9 @@ const winners = {
     const winnerRemoved = removeItem(name, winners.array);
     !!winnerRemoved && element.list.removeChild(winnerRemoved.element);
   },
+  get length() {
+    return winners.array.length;
+  },
 };
 
 const saveFullList = () => {
@@ -261,9 +264,9 @@ element.goButton.addEventListener("click", (e) => {
   element.wheelContainer.style.rotate = `${Math.round(degrees)}deg`;
 
   const medalIndex =
-    winners.array.length > medalList.length - 2
+    winners.length > medalList.length - 2
       ? medalList.length - 2
-      : winners.array.length;
+      : winners.length;
 
   const medal = document.createElement("img");
   medal.src = medalList[medalIndex];
