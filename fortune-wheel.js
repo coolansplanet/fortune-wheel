@@ -56,6 +56,11 @@ const medalList = Array.from(document.querySelectorAll("#medals .medal")).map(
 let angleMargin;
 let degrees;
 
+const removeItem = (name, list) => {
+  const index = list.findIndex((oneMember) => oneMember.name === name);
+  return index >= 0 ? list.splice(index, 1)[0] : undefined;
+};
+
 const winners = {
   array: [],
   add: (winner, medal) => {
@@ -70,11 +75,8 @@ const winners = {
     winners.array.push({ name: winner.name, element: winnerElement });
   },
   remove: (name) => {
-    const index = winners.array.findIndex(
-      (oneWinner) => oneWinner.name === name
-    );
-    index >= 0 &&
-      element.list.removeChild(winners.array.splice(index, 1)[0].element);
+    const winnerRemoved = removeItem(name, winners.array);
+    !!winnerRemoved && element.list.removeChild(winnerRemoved.element);
   },
 };
 
@@ -155,11 +157,6 @@ const generateWheel = () => {
   });
 
   degrees = angleMargin;
-};
-
-const removeItem = (name, list) => {
-  const index = list.findIndex((oneMember) => oneMember.name === name);
-  index >= 0 && list.splice(index, 1);
 };
 
 const addMemberAsElement = (oneItem, id) => {
