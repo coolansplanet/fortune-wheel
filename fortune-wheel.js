@@ -29,17 +29,22 @@ if (!!stringifiedMembers) {
   defaultTeamMembers.forEach((oneMember) => allMembers.push(oneMember));
 }
 
-const settingsBoxTeamElement = document.querySelector(
-  ".settings-box-team-list"
-);
-
-const newMemberItem = document.querySelector(
-  ".settings-box-team-list .new-member"
-);
-
-const newMemberInput = document.querySelector(
-  ".settings-box-team-list .new-member input"
-);
+const element = {
+  settingsBoxTeam: document.querySelector(".settings-box-team-list"),
+  wheel: document.querySelector("#wheel"),
+  wheelContainer: document.querySelector(".wheel-container"),
+  goButton: document.querySelector(".go-button"),
+  settingsButton: document.querySelector(".gear-button"),
+  list: document.querySelector(".list-side"),
+  winnerBanner: document.querySelector(".winner"),
+  settingsScreen: document.querySelector(".settings"),
+  settingsBox: document.querySelector(".settings-box"),
+  okButton: document.querySelector(".settings-box .ok"),
+  newMemberItem: document.querySelector(".settings-box-team-list .new-member"),
+  newMemberInput: document.querySelector(
+    ".settings-box-team-list .new-member input"
+  ),
+};
 
 const colors = ["#FFAEBC", "#FBE7C6", "#B4F8C8", "#A0E7E5"];
 
@@ -61,26 +66,16 @@ const fragmentStaticAttributes = {
   "stroke-width": wheelRadius * 2,
 };
 
-const wheel = document.querySelector("#wheel");
-const wheelContainer = document.querySelector(".wheel-container");
-const goButton = document.querySelector(".go-button");
-const settingsButton = document.querySelector(".gear-button");
-const list = document.querySelector(".list-side");
-const winnerBanner = document.querySelector(".winner");
-const settingsScreen = document.querySelector(".settings");
-const settingsBox = document.querySelector(".settings-box");
-const okButton = document.querySelector(".settings-box .ok");
-
 const rootStyle = getComputedStyle(document.documentElement);
 
 const winnerAnimationMilliseconds = parseInt(
   rootStyle.getPropertyValue("--winner-animation-time")
 );
 
-winnerBanner.addEventListener("click", (e) => {
-  team.length > 1 && goButton.removeAttribute("disabled");
-  settingsButton.removeAttribute("disabled");
-  winnerBanner.classList.remove("display");
+element.winnerBanner.addEventListener("click", (e) => {
+  team.length > 1 && element.goButton.removeAttribute("disabled");
+  element.settingsButton.removeAttribute("disabled");
+  element.winnerBanner.classList.remove("display");
 });
 
 let angleMargin;
@@ -102,7 +97,7 @@ const addWinnerToList = (winner, medal) => {
   winnerElement.append(winnerName);
   winnerElement.append(medal);
   winnerElement.style.height = 50;
-  list.append(winnerElement);
+  element.list.append(winnerElement);
   winners.push(winner);
 };
 
@@ -115,8 +110,8 @@ const sortItems = (list) =>
 
 const generateWheel = () => {
   angleMargin = Math.round(360 / (team.length * 2));
-  while (wheel.firstChild) {
-    wheel.removeChild(wheel.lastChild);
+  while (element.wheel.firstChild) {
+    element.wheel.removeChild(element.wheel.lastChild);
   }
   document.querySelectorAll(".name").forEach((oneName) => {
     oneName.parentNode.removeChild(oneName);
@@ -148,8 +143,8 @@ const generateWheel = () => {
     };
     setAttributes(wheelFragment, fragmentAttributes, true);
 
-    wheel.appendChild(wheelFragment);
-    wheelContainer.append(nameElement);
+    element.wheel.appendChild(wheelFragment);
+    element.wheelContainer.append(nameElement);
   });
 
   degrees = angleMargin;
@@ -176,7 +171,7 @@ const addMemberAsElement = (oneItem, id) => {
     if (theUserIsSure) {
       removeItem(oneItem.name, allMembers);
       removeItem(oneItem.name, team);
-      settingsBoxTeamElement.removeChild(oneItem.li);
+      element.settingsBoxTeam.removeChild(oneItem.li);
       generateWheel();
       saveFullList();
     }
@@ -200,11 +195,11 @@ const addMemberAsElement = (oneItem, id) => {
   listItem.appendChild(checkbox);
   listItem.appendChild(text);
   listItem.appendChild(button);
-  settingsBoxTeamElement.insertBefore(listItem, newMemberItem);
+  element.settingsBoxTeam.insertBefore(listItem, element.newMemberItem);
   oneItem.li = listItem;
 };
 
-newMemberInput.addEventListener("keydown", (e) => {
+element.newMemberInput.addEventListener("keydown", (e) => {
   const text = e.target.value;
   if (
     e.key === "Enter" &&
@@ -239,7 +234,7 @@ newMemberInput.addEventListener("keydown", (e) => {
     team.push(newItem);
     sortItems(team);
     generateWheel();
-    newMemberInput.value = "";
+    element.newMemberInput.value = "";
   }
 });
 allMembers.forEach((oneMember, index) => {
@@ -248,16 +243,16 @@ allMembers.forEach((oneMember, index) => {
 });
 generateWheel();
 
-goButton.addEventListener("click", (e) => {
+element.goButton.addEventListener("click", (e) => {
   e.target.setAttribute("disabled", true);
-  settingsButton.setAttribute("disabled", true);
-  wheelContainer.style.transition = `rotate ${rotatingMilliseconds}ms`;
+  element.settingsButton.setAttribute("disabled", true);
+  element.wheelContainer.style.transition = `rotate ${rotatingMilliseconds}ms`;
   const index = Math.floor(Math.random() * team.length);
   const angle = (360 / team.length) * index;
 
   degrees += 360 * 7 + angle;
 
-  wheelContainer.style.rotate = `${Math.round(degrees)}deg`;
+  element.wheelContainer.style.rotate = `${Math.round(degrees)}deg`;
 
   const medalIndex =
     winners.length > medalList.length - 2
@@ -271,40 +266,40 @@ goButton.addEventListener("click", (e) => {
 
     const winner = team.splice(winnerIndex, 1)[0];
 
-    winnerBanner.querySelector(".winner-name").innerHTML = winner.name;
-    winnerBanner.querySelector(".winner-medal").innerHTML = "";
-    winnerBanner.querySelector(".winner-medal").appendChild(medal);
-    winnerBanner.querySelector(".winner-box").style.backgroundColor =
+    element.winnerBanner.querySelector(".winner-name").innerHTML = winner.name;
+    element.winnerBanner.querySelector(".winner-medal").innerHTML = "";
+    element.winnerBanner.querySelector(".winner-medal").appendChild(medal);
+    element.winnerBanner.querySelector(".winner-box").style.backgroundColor =
       winner.color;
-    winnerBanner.classList.add("display");
+    element.winnerBanner.classList.add("display");
     addWinnerToList(winner, medal.cloneNode(true));
     if (team.length === 1) {
       const lastMedal = document.createElement("img");
       lastMedal.src = medalList[medalList.length - 1];
       addWinnerToList(team.pop(), lastMedal);
-      wheelContainer.style.opacity = 0.2;
+      element.wheelContainer.style.opacity = 0.2;
     } else {
       setTimeout(() => {
-        wheelContainer.style.transition = "";
-        wheelContainer.style.rotate = "0deg";
+        element.wheelContainer.style.transition = "";
+        element.wheelContainer.style.rotate = "0deg";
         generateWheel();
       }, winnerAnimationMilliseconds);
     }
   }, rotatingMilliseconds);
 });
 
-settingsButton.addEventListener("click", (e) => {
-  settingsScreen.classList.add("display");
+element.settingsButton.addEventListener("click", () => {
+  element.settingsScreen.classList.add("display");
 });
 
-settingsScreen.addEventListener("click", (e) => {
-  settingsScreen.classList.remove("display");
+element.settingsScreen.addEventListener("click", () => {
+  element.settingsScreen.classList.remove("display");
 });
 
-okButton.addEventListener("click", (e) => {
-  settingsScreen.classList.remove("display");
+element.okButton.addEventListener("click", () => {
+  element.settingsScreen.classList.remove("display");
 });
 
-settingsBox.addEventListener("click", (e) => {
+element.settingsBox.addEventListener("click", (e) => {
   e.stopPropagation();
 });
