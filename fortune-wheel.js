@@ -1,4 +1,4 @@
-const defaultTeamMembers = [
+const defaultPlayers = [
   { name: "Example 1", isEnabled: true },
   { name: "Example 2", isEnabled: true },
   { name: "Example 3", isEnabled: true },
@@ -11,7 +11,7 @@ const defaultTeamMembers = [
 
 const stringifiedMembers = localStorage.getItem("allMembers");
 const allMembers = [];
-const team = [];
+const players = [];
 
 const saveFullList = () => {
   localStorage.setItem(
@@ -25,8 +25,8 @@ if (!!stringifiedMembers) {
     allMembers.push(oneMember)
   );
 } else {
-  localStorage.setItem("allMembers", JSON.stringify(defaultTeamMembers));
-  defaultTeamMembers.forEach((oneMember) => allMembers.push(oneMember));
+  localStorage.setItem("allMembers", JSON.stringify(defaultPlayers));
+  defaultPlayers.forEach((oneMember) => allMembers.push(oneMember));
 }
 
 const element = {
@@ -71,7 +71,7 @@ const winnerAnimationMilliseconds = parseInt(
 );
 
 element.winnerBanner.addEventListener("click", (e) => {
-  team.length > 1 && element.goButton.removeAttribute("disabled");
+  players.length > 1 && element.goButton.removeAttribute("disabled");
   element.settingsButton.removeAttribute("disabled");
   element.winnerBanner.classList.remove("display");
 });
@@ -117,7 +117,7 @@ const sortItems = (list) =>
   });
 
 const generateWheel = () => {
-  angleMargin = Math.round(360 / (team.length * 2));
+  angleMargin = Math.round(360 / (players.length * 2));
   while (element.wheel.firstChild) {
     element.wheel.removeChild(element.wheel.lastChild);
   }
@@ -125,15 +125,15 @@ const generateWheel = () => {
     oneName.parentNode.removeChild(oneName);
   });
 
-  team.forEach((oneParticipant, index) => {
+  players.forEach((oneParticipant, index) => {
     const color = colors[index % colors.length];
 
     oneParticipant.color =
-      index === team.length - 1 && color === team[0].color
+      index === players.length - 1 && color === players[0].color
         ? colors[Math.ceil(colors.length / 2) - 1]
         : color;
 
-    const angle = (index * 360) / team.length;
+    const angle = (index * 360) / players.length;
     const nameElement = document.createElement("p");
     nameElement.classList.add("name");
     nameElement.style.rotate = `${angle + angleMargin}deg`;
@@ -146,7 +146,7 @@ const generateWheel = () => {
     const fragmentAttributes = {
       ...fragmentStaticAttributes,
       stroke: oneParticipant.color,
-      "stroke-dasharray": `${31.4 / team.length} 31.4`,
+      "stroke-dasharray": `${31.4 / players.length} 31.4`,
       transform: `rotate(${angle} 10 10)`,
     };
     setAttributes(wheelFragment, fragmentAttributes, true);
@@ -178,7 +178,7 @@ const addMemberAsElement = (oneItem, id) => {
     );
     if (theUserIsSure) {
       removeItem(oneItem.name, allMembers);
-      removeItem(oneItem.name, team);
+      removeItem(oneItem.name, players);
       winners.remove(oneItem.name);
       element.settingsBoxTeam.removeChild(oneItem.li);
       generateWheel();
@@ -191,10 +191,10 @@ const addMemberAsElement = (oneItem, id) => {
     );
     member.isEnabled = e.target.checked;
     if (e.target.checked) {
-      team.push(member);
-      sortItems(team);
+      players.push(member);
+      sortItems(players);
     } else {
-      removeItem(oneItem.name, team);
+      removeItem(oneItem.name, players);
       winners.remove(oneItem.name);
     }
     generateWheel();
@@ -241,15 +241,15 @@ element.newMemberInput.addEventListener("keydown", (e) => {
     sortItems(allMembers);
     saveFullList();
     addMemberAsElement(newItem, "member-" + text);
-    team.push(newItem);
-    sortItems(team);
+    players.push(newItem);
+    sortItems(players);
     generateWheel();
     element.newMemberInput.value = "";
   }
 });
 allMembers.forEach((oneMember, index) => {
   addMemberAsElement(oneMember, "member-" + index);
-  oneMember.isEnabled && team.push(oneMember);
+  oneMember.isEnabled && players.push(oneMember);
 });
 generateWheel();
 
@@ -257,8 +257,8 @@ element.goButton.addEventListener("click", (e) => {
   e.target.setAttribute("disabled", true);
   element.settingsButton.setAttribute("disabled", true);
   element.wheelContainer.style.transition = `rotate ${rotatingMilliseconds}ms`;
-  const index = Math.floor(Math.random() * team.length);
-  const angle = (360 / team.length) * index;
+  const index = Math.floor(Math.random() * players.length);
+  const angle = (360 / players.length) * index;
 
   degrees += 360 * 7 + angle;
 
@@ -272,9 +272,9 @@ element.goButton.addEventListener("click", (e) => {
   const medal = document.createElement("img");
   medal.src = medalList[medalIndex];
   setTimeout(() => {
-    const winnerIndex = team.length - 1 - index;
+    const winnerIndex = players.length - 1 - index;
 
-    const winner = team.splice(winnerIndex, 1)[0];
+    const winner = players.splice(winnerIndex, 1)[0];
 
     element.winnerBanner.querySelector(".winner-name").innerHTML = winner.name;
     element.winnerBanner.querySelector(".winner-medal").innerHTML = "";
@@ -283,10 +283,10 @@ element.goButton.addEventListener("click", (e) => {
       winner.color;
     element.winnerBanner.classList.add("display");
     winners.add(winner, medal.cloneNode(true));
-    if (team.length === 1) {
+    if (players.length === 1) {
       const lastMedal = document.createElement("img");
       lastMedal.src = medalList[medalList.length - 1];
-      winners.add(team.pop(), lastMedal);
+      winners.add(players.pop(), lastMedal);
       element.wheelContainer.style.opacity = 0.2;
     } else {
       setTimeout(() => {
