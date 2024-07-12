@@ -48,8 +48,6 @@ const element = {
 
 const colors = ["#FFAEBC", "#FBE7C6", "#B4F8C8", "#A0E7E5"];
 
-const winners = [];
-
 const medalList = Array.from(document.querySelectorAll("#medals .medal")).map(
   (oneMedal) => oneMedal.src
 );
@@ -89,7 +87,8 @@ const setAttributes = (element, attributes = {}, ns = false) => {
   });
 };
 
-const winnerList = {
+const winners = {
+  array: [],
   add: (winner, medal) => {
     const winnerElement = document.createElement("div");
     winnerElement.classList.add("winner-element");
@@ -99,11 +98,14 @@ const winnerList = {
     winnerElement.append(medal);
     winnerElement.style.height = 50;
     element.list.append(winnerElement);
-    winners.push({ name: winner.name, element: winnerElement });
+    winners.array.push({ name: winner.name, element: winnerElement });
   },
   remove: (name) => {
-    const index = winners.findIndex((oneWinner) => oneWinner.name === name);
-    index >= 0 && element.list.removeChild(winners.splice(index, 1)[0].element);
+    const index = winners.array.findIndex(
+      (oneWinner) => oneWinner.name === name
+    );
+    index >= 0 &&
+      element.list.removeChild(winners.array.splice(index, 1)[0].element);
   },
 };
 
@@ -177,7 +179,7 @@ const addMemberAsElement = (oneItem, id) => {
     if (theUserIsSure) {
       removeItem(oneItem.name, allMembers);
       removeItem(oneItem.name, team);
-      winnerList.remove(oneItem.name);
+      winners.remove(oneItem.name);
       element.settingsBoxTeam.removeChild(oneItem.li);
       generateWheel();
       saveFullList();
@@ -193,7 +195,7 @@ const addMemberAsElement = (oneItem, id) => {
       sortItems(team);
     } else {
       removeItem(oneItem.name, team);
-      winnerList.remove(oneItem.name);
+      winners.remove(oneItem.name);
     }
     generateWheel();
     saveFullList();
@@ -263,9 +265,9 @@ element.goButton.addEventListener("click", (e) => {
   element.wheelContainer.style.rotate = `${Math.round(degrees)}deg`;
 
   const medalIndex =
-    winners.length > medalList.length - 2
+    winners.array.length > medalList.length - 2
       ? medalList.length - 2
-      : winners.length;
+      : winners.array.length;
 
   const medal = document.createElement("img");
   medal.src = medalList[medalIndex];
@@ -280,11 +282,11 @@ element.goButton.addEventListener("click", (e) => {
     element.winnerBanner.querySelector(".winner-box").style.backgroundColor =
       winner.color;
     element.winnerBanner.classList.add("display");
-    winnerList.add(winner, medal.cloneNode(true));
+    winners.add(winner, medal.cloneNode(true));
     if (team.length === 1) {
       const lastMedal = document.createElement("img");
       lastMedal.src = medalList[medalList.length - 1];
-      winnerList.add(team.pop(), lastMedal);
+      winners.add(team.pop(), lastMedal);
       element.wheelContainer.style.opacity = 0.2;
     } else {
       setTimeout(() => {
