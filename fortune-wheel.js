@@ -84,8 +84,8 @@ const allMembers = {
     );
   },
   add: (members) => {
-    const newMembers = Array.isArray(members) ? members : [members];
-    newMembers.forEach((newMember) => {
+    const newMemberList = Array.isArray(members) ? members : [members];
+    newMemberList.forEach((newMember) => {
       allMembers.list.push(newMember);
       sortItems(allMembers.list);
       newMember.isEnabled && players.push(newMember);
