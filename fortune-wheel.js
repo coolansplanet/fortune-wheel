@@ -43,12 +43,13 @@ const allMembers = {
     { name: "Example 8", isEnabled: true },
   ],
   add: (oneItem) => {
+    const id = "member-" + oneItem.name;
     const listItem = element.create("li");
     const checkbox = element.create("input");
     const text = element.create("label");
     const button = element.create("button");
     checkbox.setAttribute("type", "checkbox");
-    checkbox.setAttribute("id", "member-" + oneItem.name);
+    checkbox.setAttribute("id", id);
     checkbox.checked = oneItem.isEnabled;
 
     button.addEventListener("click", () => {
@@ -255,7 +256,7 @@ element.newMemberInput.addEventListener("keydown", (e) => {
     element.newMemberInput.value = "";
   }
 });
-allMembers.list.forEach((oneMember, index) => {
+allMembers.list.forEach((oneMember) => {
   allMembers.add(oneMember);
   oneMember.isEnabled && players.push(oneMember);
 });
