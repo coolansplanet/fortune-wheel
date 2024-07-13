@@ -36,6 +36,13 @@ html {
   height: 40vw;
   position: sticky;
   top: 0;
+  transition: width var(--winner-animation-time),
+    opacity var(--winner-animation-time);
+}
+
+.wheel-side.disabled {
+  width: 0;
+  opacity: 0;
 }
 
 .list-side {

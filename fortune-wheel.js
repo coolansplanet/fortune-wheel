@@ -32,6 +32,7 @@ const element = {
   settingsBoxTeam: document.querySelector(".settings-box-team-list"),
   wheel: document.querySelector("#wheel"),
   wheelContainer: document.querySelector(".wheel-container"),
+  wheelSide: document.querySelector(".wheel-side"),
   goButton: document.querySelector(".go-button"),
   settingsButton: document.querySelector(".gear-button"),
   list: document.querySelector(".list-side"),
@@ -291,7 +292,7 @@ element.goButton.addEventListener("click", (e) => {
       const lastMedal = element.create("img");
       lastMedal.src = medalList[medalList.length - 1];
       winners.add(players.pop(), lastMedal);
-      element.wheelContainer.style.opacity = 0.2;
+      element.wheelSide.classList.add("disabled");
     } else {
       setTimeout(() => {
         element.wheelContainer.style.transition = "";
