@@ -249,7 +249,6 @@ element.newMemberInput.addEventListener("keydown", (e) => {
     };
 
     allMembers.add(newItem);
-    players.push(newItem);
     sortItems(players);
     generateWheel();
     element.newMemberInput.value = "";
