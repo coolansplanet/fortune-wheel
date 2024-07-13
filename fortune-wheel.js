@@ -1,3 +1,25 @@
+const players = [];
+
+const colors = ["#FFAEBC", "#FBE7C6", "#B4F8C8", "#A0E7E5"];
+
+const rotatingMilliseconds = 5000;
+
+const wheelRadius = 5;
+
+const fragmentStaticAttributes = {
+  r: wheelRadius,
+  cx: wheelRadius * 2,
+  cy: wheelRadius * 2,
+  fill: "transparent",
+  "stroke-width": wheelRadius * 2,
+};
+
+const rootStyle = getComputedStyle(document.documentElement);
+
+const winnerAnimationMilliseconds = parseInt(
+  rootStyle.getPropertyValue("--winner-animation-time")
+);
+
 const element = {
   create: (name) => document.createElement(name),
   settingsBoxTeam: document.querySelector(".settings-box-team-list"),
@@ -42,63 +64,65 @@ const allMembers = {
     { name: "Example 7", isEnabled: true },
     { name: "Example 8", isEnabled: true },
   ],
-  add: (oneItem) => {
-    const id = "member-" + oneItem.name.toLowerCase();
+  add: (newMember) => {
+    allMembers.list.push(newMember);
+    sortItems(allMembers.list);
+    allMembers.save();
+    newMember.isEnabled && players.push(newMember);
+    const id = "member-" + newMember.name.toLowerCase();
     const listItem = element.create("li");
     const checkbox = element.create("input");
     const text = element.create("label");
     const button = element.create("button");
     checkbox.setAttribute("type", "checkbox");
     checkbox.setAttribute("id", id);
-    checkbox.checked = oneItem.isEnabled;
+    checkbox.checked = newMember.isEnabled;
 
     button.addEventListener("click", () => {
       const theUserIsSure = confirm(
-        `Are you sure you want to remove ${oneItem.name} from the list?`
+        `Are you sure you want to remove ${newMember.name} from the list?`
       );
       if (theUserIsSure) {
-        removeItem(oneItem.name).from(allMembers.list);
-        removeItem(oneItem.name).from(players);
-        winners.remove(oneItem.name);
-        element.settingsBoxTeam.removeChild(oneItem.li);
+        removeItem(newMember.name).from(allMembers.list);
+        removeItem(newMember.name).from(players);
+        winners.remove(newMember.name);
+        element.settingsBoxTeam.removeChild(newMember.li);
         generateWheel();
         allMembers.save();
       }
     });
     checkbox.addEventListener("change", (e) => {
       const member = allMembers.list.find(
-        (oneMember) => oneMember.name === oneItem.name
+        (oneMember) => oneMember.name === newMember.name
       );
       member.isEnabled = e.target.checked;
       if (e.target.checked) {
         players.push(member);
         sortItems(players);
       } else {
-        removeItem(oneItem.name).from(players);
-        winners.remove(oneItem.name);
+        removeItem(newMember.name).from(players);
+        winners.remove(newMember.name);
       }
       generateWheel();
       allMembers.save();
     });
     text.setAttribute("for", id);
-    text.append(oneItem.name);
+    text.append(newMember.name);
     listItem.appendChild(checkbox);
     listItem.appendChild(text);
     listItem.appendChild(button);
     element.settingsBoxTeam.insertBefore(listItem, element.newMemberItem);
-    oneItem.li = listItem;
+    newMember.li = listItem;
   },
   load: () => {
     const stringifiedMembers = localStorage.getItem("allMembers");
     if (!!stringifiedMembers) {
       JSON.parse(stringifiedMembers).forEach((oneMember) =>
-        allMembers.list.push(oneMember)
+        allMembers.add(oneMember)
       );
     } else {
       localStorage.setItem("allMembers", JSON.stringify(allMembers.default));
-      allMembers.default.forEach((oneMember) =>
-        allMembers.list.push(oneMember)
-      );
+      allMembers.default.forEach((oneMember) => allMembers.add(oneMember));
     }
   },
   save: () => {
@@ -108,28 +132,6 @@ const allMembers = {
     );
   },
 };
-
-const players = [];
-
-const colors = ["#FFAEBC", "#FBE7C6", "#B4F8C8", "#A0E7E5"];
-
-const rotatingMilliseconds = 5000;
-
-const wheelRadius = 5;
-
-const fragmentStaticAttributes = {
-  r: wheelRadius,
-  cx: wheelRadius * 2,
-  cy: wheelRadius * 2,
-  fill: "transparent",
-  "stroke-width": wheelRadius * 2,
-};
-
-const rootStyle = getComputedStyle(document.documentElement);
-
-const winnerAnimationMilliseconds = parseInt(
-  rootStyle.getPropertyValue("--winner-animation-time")
-);
 
 const medalList = Array.from(document.querySelectorAll("#medals .medal")).map(
   (oneMedal) => oneMedal.src
@@ -246,9 +248,7 @@ element.newMemberInput.addEventListener("keydown", (e) => {
         .join(" "),
       isEnabled: true,
     };
-    allMembers.list.push(newItem);
-    sortItems(allMembers.list);
-    allMembers.save();
+
     allMembers.add(newItem);
     players.push(newItem);
     sortItems(players);
@@ -256,10 +256,7 @@ element.newMemberInput.addEventListener("keydown", (e) => {
     element.newMemberInput.value = "";
   }
 });
-allMembers.list.forEach((oneMember) => {
-  allMembers.add(oneMember);
-  oneMember.isEnabled && players.push(oneMember);
-});
+
 generateWheel();
 
 element.goButton.addEventListener("click", (e) => {
