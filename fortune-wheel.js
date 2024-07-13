@@ -42,13 +42,13 @@ const allMembers = {
     { name: "Example 7", isEnabled: true },
     { name: "Example 8", isEnabled: true },
   ],
-  add: (oneItem, id) => {
+  add: (oneItem) => {
     const listItem = element.create("li");
     const checkbox = element.create("input");
     const text = element.create("label");
     const button = element.create("button");
     checkbox.setAttribute("type", "checkbox");
-    checkbox.setAttribute("id", id);
+    checkbox.setAttribute("id", "member-" + oneItem.name);
     checkbox.checked = oneItem.isEnabled;
 
     button.addEventListener("click", () => {
@@ -248,7 +248,7 @@ element.newMemberInput.addEventListener("keydown", (e) => {
     allMembers.list.push(newItem);
     sortItems(allMembers.list);
     allMembers.save();
-    allMembers.add(newItem, "member-" + text);
+    allMembers.add(newItem);
     players.push(newItem);
     sortItems(players);
     generateWheel();
@@ -256,7 +256,7 @@ element.newMemberInput.addEventListener("keydown", (e) => {
   }
 });
 allMembers.list.forEach((oneMember, index) => {
-  allMembers.add(oneMember, "member-" + index);
+  allMembers.add(oneMember);
   oneMember.isEnabled && players.push(oneMember);
 });
 generateWheel();
