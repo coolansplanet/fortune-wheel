@@ -73,13 +73,9 @@ const allMembers = {
   ],
   load: () => {
     const stringifiedMembers = localStorage.getItem("allMembers");
-    if (!!stringifiedMembers) {
-      JSON.parse(stringifiedMembers).forEach((oneMember) =>
-        allMembers.add(oneMember)
-      );
-    } else {
-      allMembers.default.forEach((oneMember) => allMembers.add(oneMember));
-    }
+    !!stringifiedMembers
+      ? allMembers.add(JSON.parse(stringifiedMembers))
+      : allMembers.add(allMembers.default);
   },
   save: () => {
     localStorage.setItem(
@@ -87,55 +83,58 @@ const allMembers = {
       JSON.stringify(allMembers.list.map(({ li, ...rest }) => rest))
     );
   },
-  add: (newMember) => {
-    allMembers.list.push(newMember);
-    sortItems(allMembers.list);
-    allMembers.save();
-    newMember.isEnabled && players.push(newMember);
-    const id = "member-" + newMember.name.toLowerCase();
-    const listItem = element.create("li");
-    const checkbox = element.create("input");
-    const text = element.create("label");
-    const button = element.create("button");
-    checkbox.setAttribute("type", "checkbox");
-    checkbox.setAttribute("id", id);
-    checkbox.checked = newMember.isEnabled;
+  add: (members) => {
+    const newMembers = Array.isArray(members) ? members : [members];
+    newMembers.forEach((newMember) => {
+      allMembers.list.push(newMember);
+      sortItems(allMembers.list);
+      newMember.isEnabled && players.push(newMember);
+      const id = "member-" + newMember.name.toLowerCase();
+      const listItem = element.create("li");
+      const checkbox = element.create("input");
+      const text = element.create("label");
+      const button = element.create("button");
+      checkbox.setAttribute("type", "checkbox");
+      checkbox.setAttribute("id", id);
+      checkbox.checked = newMember.isEnabled;
 
-    button.addEventListener("click", () => {
-      const theUserIsSure = confirm(
-        `Are you sure you want to remove ${newMember.name} from the list?`
-      );
-      if (theUserIsSure) {
-        removeItem(newMember.name).from(allMembers.list);
-        removeItem(newMember.name).from(players);
-        winners.remove(newMember.name);
-        element.settingsBoxTeam.removeChild(newMember.li);
+      button.addEventListener("click", () => {
+        const theUserIsSure = confirm(
+          `Are you sure you want to remove ${newMember.name} from the list?`
+        );
+        if (theUserIsSure) {
+          removeItem(newMember.name).from(allMembers.list);
+          removeItem(newMember.name).from(players);
+          winners.remove(newMember.name);
+          element.settingsBoxTeam.removeChild(newMember.li);
+          generateWheel();
+          allMembers.save();
+        }
+      });
+      checkbox.addEventListener("change", (e) => {
+        const member = allMembers.list.find(
+          (oneMember) => oneMember.name === newMember.name
+        );
+        member.isEnabled = e.target.checked;
+        if (e.target.checked) {
+          players.push(member);
+          sortItems(players);
+        } else {
+          removeItem(newMember.name).from(players);
+          winners.remove(newMember.name);
+        }
         generateWheel();
         allMembers.save();
-      }
+      });
+      text.setAttribute("for", id);
+      text.append(newMember.name);
+      listItem.appendChild(checkbox);
+      listItem.appendChild(text);
+      listItem.appendChild(button);
+      element.settingsBoxTeam.insertBefore(listItem, element.newMemberItem);
+      newMember.li = listItem;
     });
-    checkbox.addEventListener("change", (e) => {
-      const member = allMembers.list.find(
-        (oneMember) => oneMember.name === newMember.name
-      );
-      member.isEnabled = e.target.checked;
-      if (e.target.checked) {
-        players.push(member);
-        sortItems(players);
-      } else {
-        removeItem(newMember.name).from(players);
-        winners.remove(newMember.name);
-      }
-      generateWheel();
-      allMembers.save();
-    });
-    text.setAttribute("for", id);
-    text.append(newMember.name);
-    listItem.appendChild(checkbox);
-    listItem.appendChild(text);
-    listItem.appendChild(button);
-    element.settingsBoxTeam.insertBefore(listItem, element.newMemberItem);
-    newMember.li = listItem;
+    allMembers.save();
   },
 };
 
