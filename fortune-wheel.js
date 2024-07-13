@@ -193,11 +193,12 @@ element.winnerBanner.addEventListener("click", () => {
   players.length > 1 && element.goButton.removeAttribute("disabled");
   element.settingsButton.removeAttribute("disabled");
   element.winnerBanner.classList.remove("display");
-  setTimeout(() => {
-    if (players.length === 1) {
+
+  if (players.length === 1) {
+    setTimeout(() => {
       winners.add(players.pop());
-    }
-  }, winnerAnimationMilliseconds);
+    }, winnerAnimationMilliseconds);
+  }
 });
 
 const generateWheel = () => {
