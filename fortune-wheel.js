@@ -1,3 +1,6 @@
+let angleMargin;
+let degrees;
+
 const players = [];
 
 const colors = ["#FFAEBC", "#FBE7C6", "#B4F8C8", "#A0E7E5"];
@@ -18,6 +21,10 @@ const rootStyle = getComputedStyle(document.documentElement);
 
 const winnerAnimationMilliseconds = parseInt(
   rootStyle.getPropertyValue("--winner-animation-time")
+);
+
+const medalList = Array.from(document.querySelectorAll("#medals .medal")).map(
+  (oneMedal) => oneMedal.src
 );
 
 const element = {
@@ -132,13 +139,6 @@ const allMembers = {
     );
   },
 };
-
-const medalList = Array.from(document.querySelectorAll("#medals .medal")).map(
-  (oneMedal) => oneMedal.src
-);
-
-let angleMargin;
-let degrees;
 
 const winners = {
   array: [],
