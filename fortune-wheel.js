@@ -141,14 +141,29 @@ const allMembers = {
 
 const winners = {
   list: [],
-  add: (winner, medal) => {
+  add: (winner) => {
+    const medalIndex =
+      players.length === 0
+        ? medalList.length - 1
+        : winners.length > medalList.length - 2
+        ? medalList.length - 2
+        : winners.length;
+
+    const medal = element.create("img");
+    medal.src = medalList[medalIndex];
+
+    element.winnerBanner.querySelector(".winner-name").innerHTML = winner.name;
+    element.winnerBanner.querySelector(".winner-medal").innerHTML = "";
+    element.winnerBanner.querySelector(".winner-medal").appendChild(medal);
+    element.winnerBanner.querySelector(".winner-box").style.backgroundColor =
+      winner.color;
+    element.winnerBanner.classList.add("display");
     const winnerElement = element.create("div");
     winnerElement.classList.add("winner-element");
     const winnerName = element.create("p");
     winnerName.append(winner.name);
     winnerElement.append(winnerName);
-    winnerElement.append(medal);
-    winnerElement.style.height = 50;
+    winnerElement.append(medal.cloneNode(true));
     element.list.append(winnerElement);
     winners.list.push({ name: winner.name, element: winnerElement });
   },
@@ -178,6 +193,11 @@ element.winnerBanner.addEventListener("click", () => {
   players.length > 1 && element.goButton.removeAttribute("disabled");
   element.settingsButton.removeAttribute("disabled");
   element.winnerBanner.classList.remove("display");
+  setTimeout(() => {
+    if (players.length === 1) {
+      winners.add(players.pop());
+    }
+  }, winnerAnimationMilliseconds);
 });
 
 const generateWheel = () => {
@@ -269,36 +289,17 @@ element.goButton.addEventListener("click", (e) => {
 
   element.wheelContainer.style.rotate = `${Math.round(degrees)}deg`;
 
-  const medalIndex =
-    winners.length > medalList.length - 2
-      ? medalList.length - 2
-      : winners.length;
-
-  const medal = element.create("img");
-  medal.src = medalList[medalIndex];
   setTimeout(() => {
     const winnerIndex = players.length - 1 - index;
-
     const winner = players.splice(winnerIndex, 1)[0];
-
-    element.winnerBanner.querySelector(".winner-name").innerHTML = winner.name;
-    element.winnerBanner.querySelector(".winner-medal").innerHTML = "";
-    element.winnerBanner.querySelector(".winner-medal").appendChild(medal);
-    element.winnerBanner.querySelector(".winner-box").style.backgroundColor =
-      winner.color;
-    element.winnerBanner.classList.add("display");
-    winners.add(winner, medal.cloneNode(true));
+    winners.add(winner);
+    setTimeout(() => {
+      element.wheelContainer.style.transition = "";
+      element.wheelContainer.style.rotate = "0deg";
+      generateWheel();
+    }, winnerAnimationMilliseconds);
     if (players.length === 1) {
-      const lastMedal = element.create("img");
-      lastMedal.src = medalList[medalList.length - 1];
-      winners.add(players.pop(), lastMedal);
       element.wheelSide.classList.add("disabled");
-    } else {
-      setTimeout(() => {
-        element.wheelContainer.style.transition = "";
-        element.wheelContainer.style.rotate = "0deg";
-        generateWheel();
-      }, winnerAnimationMilliseconds);
     }
   }, rotatingMilliseconds);
 });
