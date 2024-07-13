@@ -140,7 +140,7 @@ const allMembers = {
 };
 
 const winners = {
-  array: [],
+  list: [],
   add: (winner, medal) => {
     const winnerElement = element.create("div");
     winnerElement.classList.add("winner-element");
@@ -150,14 +150,14 @@ const winners = {
     winnerElement.append(medal);
     winnerElement.style.height = 50;
     element.list.append(winnerElement);
-    winners.array.push({ name: winner.name, element: winnerElement });
+    winners.list.push({ name: winner.name, element: winnerElement });
   },
   remove: (name) => {
-    const winnerRemoved = removeItem(name).from(winners.array);
+    const winnerRemoved = removeItem(name).from(winners.list);
     !!winnerRemoved && element.list.removeChild(winnerRemoved.element);
   },
   get length() {
-    return winners.array.length;
+    return winners.list.length;
   },
 };
 
