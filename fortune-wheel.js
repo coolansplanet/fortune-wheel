@@ -1,32 +1,5 @@
-const stringifiedMembers = localStorage.getItem("allMembers");
-const allMembers = [];
-const players = [];
-const defaultPlayers = [
-  { name: "Example 1", isEnabled: true },
-  { name: "Example 2", isEnabled: true },
-  { name: "Example 3", isEnabled: true },
-  { name: "Example 4", isEnabled: true },
-  { name: "Example 5", isEnabled: true },
-  { name: "Example 6", isEnabled: true },
-  { name: "Example 7", isEnabled: true },
-  { name: "Example 8", isEnabled: true },
-];
-
-const colors = ["#FFAEBC", "#FBE7C6", "#B4F8C8", "#A0E7E5"];
-
-const rotatingMilliseconds = 5000;
-
-const wheelRadius = 5;
-
-const fragmentStaticAttributes = {
-  r: wheelRadius,
-  cx: wheelRadius * 2,
-  cy: wheelRadius * 2,
-  fill: "transparent",
-  "stroke-width": wheelRadius * 2,
-};
-
 const element = {
+  create: (name) => document.createElement(name),
   settingsBoxTeam: document.querySelector(".settings-box-team-list"),
   wheel: document.querySelector("#wheel"),
   wheelContainer: document.querySelector(".wheel-container"),
@@ -43,6 +16,114 @@ const element = {
   ),
 };
 
+const removeItem = (name) => ({
+  from: (list) => {
+    const index = list.findIndex((oneMember) => oneMember.name === name);
+    return index >= 0 ? list.splice(index, 1)[0] : undefined;
+  },
+});
+
+const sortItems = (list) =>
+  list.sort((a, b) => {
+    const nameA = a.name.toLowerCase();
+    const nameB = b.name.toLowerCase();
+    return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+  });
+
+const allMembers = {
+  list: [],
+  default: [
+    { name: "Example 1", isEnabled: true },
+    { name: "Example 2", isEnabled: true },
+    { name: "Example 3", isEnabled: true },
+    { name: "Example 4", isEnabled: true },
+    { name: "Example 5", isEnabled: true },
+    { name: "Example 6", isEnabled: true },
+    { name: "Example 7", isEnabled: true },
+    { name: "Example 8", isEnabled: true },
+  ],
+  add: (oneItem, id) => {
+    const listItem = element.create("li");
+    const checkbox = element.create("input");
+    const text = element.create("label");
+    const button = element.create("button");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.setAttribute("id", id);
+    checkbox.checked = oneItem.isEnabled;
+
+    button.addEventListener("click", () => {
+      const theUserIsSure = confirm(
+        `Are you sure you want to remove ${oneItem.name} from the list?`
+      );
+      if (theUserIsSure) {
+        removeItem(oneItem.name).from(allMembers.list);
+        removeItem(oneItem.name).from(players);
+        winners.remove(oneItem.name);
+        element.settingsBoxTeam.removeChild(oneItem.li);
+        generateWheel();
+        allMembers.save();
+      }
+    });
+    checkbox.addEventListener("change", (e) => {
+      const member = allMembers.list.find(
+        (oneMember) => oneMember.name === oneItem.name
+      );
+      member.isEnabled = e.target.checked;
+      if (e.target.checked) {
+        players.push(member);
+        sortItems(players);
+      } else {
+        removeItem(oneItem.name).from(players);
+        winners.remove(oneItem.name);
+      }
+      generateWheel();
+      allMembers.save();
+    });
+    text.setAttribute("for", id);
+    text.append(oneItem.name);
+    listItem.appendChild(checkbox);
+    listItem.appendChild(text);
+    listItem.appendChild(button);
+    element.settingsBoxTeam.insertBefore(listItem, element.newMemberItem);
+    oneItem.li = listItem;
+  },
+  load: () => {
+    const stringifiedMembers = localStorage.getItem("allMembers");
+    if (!!stringifiedMembers) {
+      JSON.parse(stringifiedMembers).forEach((oneMember) =>
+        allMembers.list.push(oneMember)
+      );
+    } else {
+      localStorage.setItem("allMembers", JSON.stringify(allMembers.default));
+      allMembers.default.forEach((oneMember) =>
+        allMembers.list.push(oneMember)
+      );
+    }
+  },
+  save: () => {
+    localStorage.setItem(
+      "allMembers",
+      JSON.stringify(allMembers.list.map(({ li, ...rest }) => rest))
+    );
+  },
+};
+
+const players = [];
+
+const colors = ["#FFAEBC", "#FBE7C6", "#B4F8C8", "#A0E7E5"];
+
+const rotatingMilliseconds = 5000;
+
+const wheelRadius = 5;
+
+const fragmentStaticAttributes = {
+  r: wheelRadius,
+  cx: wheelRadius * 2,
+  cy: wheelRadius * 2,
+  fill: "transparent",
+  "stroke-width": wheelRadius * 2,
+};
+
 const rootStyle = getComputedStyle(document.documentElement);
 
 const winnerAnimationMilliseconds = parseInt(
@@ -56,17 +137,12 @@ const medalList = Array.from(document.querySelectorAll("#medals .medal")).map(
 let angleMargin;
 let degrees;
 
-const removeItem = (name, list) => {
-  const index = list.findIndex((oneMember) => oneMember.name === name);
-  return index >= 0 ? list.splice(index, 1)[0] : undefined;
-};
-
 const winners = {
   array: [],
   add: (winner, medal) => {
-    const winnerElement = document.createElement("div");
+    const winnerElement = element.create("div");
     winnerElement.classList.add("winner-element");
-    const winnerName = document.createElement("p");
+    const winnerName = element.create("p");
     winnerName.append(winner.name);
     winnerElement.append(winnerName);
     winnerElement.append(medal);
@@ -75,19 +151,12 @@ const winners = {
     winners.array.push({ name: winner.name, element: winnerElement });
   },
   remove: (name) => {
-    const winnerRemoved = removeItem(name, winners.array);
+    const winnerRemoved = removeItem(name).from(winners.array);
     !!winnerRemoved && element.list.removeChild(winnerRemoved.element);
   },
   get length() {
     return winners.array.length;
   },
-};
-
-const saveFullList = () => {
-  localStorage.setItem(
-    "allMembers",
-    JSON.stringify(allMembers.map(({ li, ...rest }) => rest))
-  );
 };
 
 const setAttributes = (element, attributes = {}, ns = false) => {
@@ -98,21 +167,7 @@ const setAttributes = (element, attributes = {}, ns = false) => {
   });
 };
 
-const sortItems = (list) =>
-  list.sort((a, b) => {
-    const nameA = a.name.toLowerCase();
-    const nameB = b.name.toLowerCase();
-    return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-  });
-
-if (!!stringifiedMembers) {
-  JSON.parse(stringifiedMembers).forEach((oneMember) =>
-    allMembers.push(oneMember)
-  );
-} else {
-  localStorage.setItem("allMembers", JSON.stringify(defaultPlayers));
-  defaultPlayers.forEach((oneMember) => allMembers.push(oneMember));
-}
+allMembers.load();
 
 element.winnerBanner.addEventListener("click", () => {
   players.length > 1 && element.goButton.removeAttribute("disabled");
@@ -138,7 +193,7 @@ const generateWheel = () => {
         : color;
 
     const angle = (index * 360) / players.length;
-    const nameElement = document.createElement("p");
+    const nameElement = element.create("p");
     nameElement.classList.add("name");
     nameElement.style.rotate = `${angle + angleMargin}deg`;
     nameElement.append(oneParticipant.name);
@@ -162,52 +217,6 @@ const generateWheel = () => {
   degrees = angleMargin;
 };
 
-const addMemberAsElement = (oneItem, id) => {
-  const listItem = document.createElement("li");
-  const checkbox = document.createElement("input");
-  const text = document.createElement("label");
-  const button = document.createElement("button");
-  checkbox.setAttribute("type", "checkbox");
-  checkbox.setAttribute("id", id);
-  checkbox.checked = oneItem.isEnabled;
-
-  button.addEventListener("click", () => {
-    const theUserIsSure = confirm(
-      `Are you sure you want to remove ${oneItem.name} from the list?`
-    );
-    if (theUserIsSure) {
-      removeItem(oneItem.name, allMembers);
-      removeItem(oneItem.name, players);
-      winners.remove(oneItem.name);
-      element.settingsBoxTeam.removeChild(oneItem.li);
-      generateWheel();
-      saveFullList();
-    }
-  });
-  checkbox.addEventListener("change", (e) => {
-    const member = allMembers.find(
-      (oneMember) => oneMember.name === oneItem.name
-    );
-    member.isEnabled = e.target.checked;
-    if (e.target.checked) {
-      players.push(member);
-      sortItems(players);
-    } else {
-      removeItem(oneItem.name, players);
-      winners.remove(oneItem.name);
-    }
-    generateWheel();
-    saveFullList();
-  });
-  text.setAttribute("for", id);
-  text.append(oneItem.name);
-  listItem.appendChild(checkbox);
-  listItem.appendChild(text);
-  listItem.appendChild(button);
-  element.settingsBoxTeam.insertBefore(listItem, element.newMemberItem);
-  oneItem.li = listItem;
-};
-
 element.newMemberInput.addEventListener("keydown", (e) => {
   const text = e.target.value;
   if (
@@ -217,7 +226,7 @@ element.newMemberInput.addEventListener("keydown", (e) => {
     text.length > 0
   ) {
     if (
-      allMembers.find(
+      allMembers.list.find(
         (oneMember) => oneMember.name.toLowerCase() === text.toLowerCase()
       )
     ) {
@@ -236,18 +245,18 @@ element.newMemberInput.addEventListener("keydown", (e) => {
         .join(" "),
       isEnabled: true,
     };
-    allMembers.push(newItem);
-    sortItems(allMembers);
-    saveFullList();
-    addMemberAsElement(newItem, "member-" + text);
+    allMembers.list.push(newItem);
+    sortItems(allMembers.list);
+    allMembers.save();
+    allMembers.add(newItem, "member-" + text);
     players.push(newItem);
     sortItems(players);
     generateWheel();
     element.newMemberInput.value = "";
   }
 });
-allMembers.forEach((oneMember, index) => {
-  addMemberAsElement(oneMember, "member-" + index);
+allMembers.list.forEach((oneMember, index) => {
+  allMembers.add(oneMember, "member-" + index);
   oneMember.isEnabled && players.push(oneMember);
 });
 generateWheel();
@@ -268,7 +277,7 @@ element.goButton.addEventListener("click", (e) => {
       ? medalList.length - 2
       : winners.length;
 
-  const medal = document.createElement("img");
+  const medal = element.create("img");
   medal.src = medalList[medalIndex];
   setTimeout(() => {
     const winnerIndex = players.length - 1 - index;
@@ -283,7 +292,7 @@ element.goButton.addEventListener("click", (e) => {
     element.winnerBanner.classList.add("display");
     winners.add(winner, medal.cloneNode(true));
     if (players.length === 1) {
-      const lastMedal = document.createElement("img");
+      const lastMedal = element.create("img");
       lastMedal.src = medalList[medalList.length - 1];
       winners.add(players.pop(), lastMedal);
       element.wheelContainer.style.opacity = 0.2;
