@@ -71,6 +71,22 @@ const allMembers = {
     { name: "Example 7", isEnabled: true },
     { name: "Example 8", isEnabled: true },
   ],
+  load: () => {
+    const stringifiedMembers = localStorage.getItem("allMembers");
+    if (!!stringifiedMembers) {
+      JSON.parse(stringifiedMembers).forEach((oneMember) =>
+        allMembers.add(oneMember)
+      );
+    } else {
+      allMembers.default.forEach((oneMember) => allMembers.add(oneMember));
+    }
+  },
+  save: () => {
+    localStorage.setItem(
+      "allMembers",
+      JSON.stringify(allMembers.list.map(({ li, ...rest }) => rest))
+    );
+  },
   add: (newMember) => {
     allMembers.list.push(newMember);
     sortItems(allMembers.list);
@@ -120,22 +136,6 @@ const allMembers = {
     listItem.appendChild(button);
     element.settingsBoxTeam.insertBefore(listItem, element.newMemberItem);
     newMember.li = listItem;
-  },
-  load: () => {
-    const stringifiedMembers = localStorage.getItem("allMembers");
-    if (!!stringifiedMembers) {
-      JSON.parse(stringifiedMembers).forEach((oneMember) =>
-        allMembers.add(oneMember)
-      );
-    } else {
-      allMembers.default.forEach((oneMember) => allMembers.add(oneMember));
-    }
-  },
-  save: () => {
-    localStorage.setItem(
-      "allMembers",
-      JSON.stringify(allMembers.list.map(({ li, ...rest }) => rest))
-    );
   },
 };
 
