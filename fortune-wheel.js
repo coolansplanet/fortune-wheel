@@ -128,7 +128,6 @@ const allMembers = {
         allMembers.add(oneMember)
       );
     } else {
-      localStorage.setItem("allMembers", JSON.stringify(allMembers.default));
       allMembers.default.forEach((oneMember) => allMembers.add(oneMember));
     }
   },
