@@ -43,7 +43,7 @@ const allMembers = {
     { name: "Example 8", isEnabled: true },
   ],
   add: (oneItem) => {
-    const id = "member-" + oneItem.name;
+    const id = "member-" + oneItem.name.toLowerCase();
     const listItem = element.create("li");
     const checkbox = element.create("input");
     const text = element.create("label");
