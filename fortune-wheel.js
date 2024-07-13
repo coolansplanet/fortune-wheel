@@ -152,8 +152,13 @@ const winners = {
     winners.list.push({ name: winner.name, element: winnerElement });
   },
   remove: (name) => {
+    const isLastPosition = winners.list[winners.list.length - 1].name === name;
     const winnerRemoved = removeItem(name).from(winners.list);
     !!winnerRemoved && element.list.removeChild(winnerRemoved.element);
+    !isLastPosition &&
+      winners.list.forEach(({ element }, index) => {
+        element.querySelector("img").src = medalList[index];
+      });
   },
   get length() {
     return winners.list.length;
