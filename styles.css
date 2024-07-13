@@ -60,6 +60,11 @@ html {
   padding: 0;
 }
 
+.list-side .winner-element img {
+  width: 100%;
+  height: auto;
+}
+
 .list-side .winner-element::selection {
   background-color: var(--list-text-color);
   color: var(--right-side-color);
