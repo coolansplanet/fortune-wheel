@@ -253,9 +253,6 @@ element.newMemberInput.addEventListener("keydown", (e) => {
   }
 });
 
-allMembers.load();
-generateWheel();
-
 element.goButton.addEventListener("click", (e) => {
   e.target.setAttribute("disabled", true);
   element.settingsButton.setAttribute("disabled", true);
@@ -316,3 +313,6 @@ element.okButton.addEventListener("click", () => {
 element.settingsBox.addEventListener("click", (e) => {
   e.stopPropagation();
 });
+
+allMembers.load();
+generateWheel();
