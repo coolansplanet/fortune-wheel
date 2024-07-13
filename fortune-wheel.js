@@ -169,8 +169,6 @@ const setAttributes = (element, attributes = {}, ns = false) => {
   });
 };
 
-allMembers.load();
-
 element.winnerBanner.addEventListener("click", () => {
   players.length > 1 && element.goButton.removeAttribute("disabled");
   element.settingsButton.removeAttribute("disabled");
@@ -255,6 +253,7 @@ element.newMemberInput.addEventListener("keydown", (e) => {
   }
 });
 
+allMembers.load();
 generateWheel();
 
 element.goButton.addEventListener("click", (e) => {
