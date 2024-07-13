@@ -229,7 +229,7 @@ element.newMemberInput.addEventListener("keydown", (e) => {
         (oneMember) => oneMember.name.toLowerCase() === text.toLowerCase()
       )
     ) {
-      alert("That name is already in the list, please use a different one");
+      alert(`${text} is already on the list`);
       return null;
     }
 
