@@ -23,9 +23,9 @@
      inkscape:pageopacity="0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="2.25"
-     inkscape:cx="113.11111"
-     inkscape:cy="134.66667"
+     inkscape:zoom="6.363961"
+     inkscape:cx="50.047447"
+     inkscape:cy="28.755676"
      inkscape:window-width="1920"
      inkscape:window-height="1005"
      inkscape:window-x="874"
@@ -137,7 +137,7 @@
        style="fill:url(#linearGradient13);fill-opacity:1;stroke-width:0.531276"
        d="M 1.9843747,2.9405824 V 20.880494 h 0.00108 a 9.9218636,2.9267001 0 0 0 -0.00108,0.0053 9.9218636,2.9267001 0 0 0 9.9218733,2.926651 9.9218636,2.9267001 0 0 0 9.921874,-2.926651 9.9218636,2.9267001 0 0 0 -5.29e-4,-0.0053 h 5.29e-4 V 2.9405824 Z" />
     <ellipse
-       style="fill:#dee4ef;stroke-width:0.531276;fill-opacity:1"
+       style="fill:#dee4ef;stroke-width:0.08149167;fill-opacity:1;stroke:#748eb5;stroke-opacity:0.26250625;stroke-dasharray:none"
        id="path1"
        cx="11.906261"
        cy="2.9267142"
